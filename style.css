@@ -1,0 +1,236 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --glass: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-hover: rgba(255, 255, 255, 0.18);
+  --text: #fff;
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --text-dim: rgba(255, 255, 255, 0.35);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  --radius: 24px;
+  --radius-sm: 16px;
+}
+
+body {
+  background: linear-gradient(135deg, #89a4c7 0%, #6b7f9e 40%, #3d4f6e 100%);
+  height: 100vh;
+}
+
+.container {
+  width: 70%;
+  margin: 0 auto;
+}
+
+nav {
+  height: 50px;
+  /* background-color: rgba(0, 0, 0, 0.437); */
+  display: grid;
+  grid-template-columns: 20% 60% 15% 5%;
+  width: 100%;
+  align-items: center;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.logo {
+  font-family: fira sans;
+  font-size: 30px;
+  color: white;
+  text-align: start;
+  font-weight: 800;
+}
+
+.search input {
+  outline: none;
+  border: none;
+  height: 45px;
+  width: 500px;
+  border-radius: 50px;
+  padding: 0px 20px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  color: white;
+  font-size: 1rem;
+  font-family: public sans;
+}
+
+.search input::placeholder {
+  color: var(--text-muted);
+}
+
+.search input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+
+.search button {
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 15px;
+  width: 50px;
+  height: 35px;
+  border-radius: 28px;
+  border: none;
+  outline: none;
+  position: relative;
+  right: 60px;
+  color: white;
+}
+
+.saved button,
+.saveBtn button {
+  height: 40px;
+  width: 40px;
+  padding: 0px 10px;
+  border-radius: 50px;
+  align-items: center;
+  align-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  color: white;
+}
+
+.themeToggle {
+  height: 40px;
+  width: 140px;
+  padding: 0px 5px;
+  border-radius: 50px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.themeToggle button {
+  background: none;
+  border: none;
+  width: 60px;
+  height: 30px;
+  border-radius: 25px;
+  color: white;
+  font-family: public sans;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.themeToggle button.active {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.weatherDisplay {
+  margin-top: 20px;
+  height: 500px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow);
+  border-radius: 50px;
+  padding: 30px 50px;
+}
+
+.cityLine {
+  display: flex;
+  justify-content: space-between;
+  /* margin: 50px; */
+}
+
+.cityLabel {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.city {
+  color: white;
+  font-family: Merriweather;
+  font-size: 50px;
+  font-weight: 500;
+}
+
+.country {
+  font-family: Fira Sans;
+  font-size: 30px;
+  align-content: end;
+  margin-left: 10px;
+  color: var(--text-dim);
+}
+
+.time {
+  color: var(--text-dim);
+  font-family: Public Sans;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.estTemp {
+  margin-top: 30px;
+  font-size: 100px;
+  color: white;
+  font-family: Merriweather;
+  font-weight: 900;
+}
+
+.estTemp i {
+  font-weight: 900;
+  font-size: 80px;
+  background: linear-gradient(-45deg, #738fb4 0%, #566b8b 40%, #2c3c57);
+  background-size: 400% 400%;
+  animation: gradient-move 10s ease infinite;
+
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes gradient-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.estWeather {
+  color: var(--text-dim);
+  font-family: Public Sans;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.suggestionGroup {
+  display: flex;
+  gap: 20px;
+}
+
+.suggestion {
+  background: rgba(255, 255, 255, 0.315);
+  border: 1px solid var(--glass-border);
+  padding: 5px 8px;
+  border-radius: 25px;
+  color: white;
+  font-family: Public Sans;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.stat {
+  background: var(--glass);
+  margin: 10px;
+}
+
