@@ -18,62 +18,107 @@
     <link rel="stylesheet" href="style.css" />
     <title>Weatherino</title>
   </head>
-  <body>
+  <body class="day">
     <div class="container">
-      <nav>
-        <div class="logo">Weatherino</div>
-        <div class="search">
-          <div class="searchBtn">
-            <input
-              type="search"
-              name=""
-              id="search"
-              placeholder="Search for your city..."
-            />
-            <button><i class="fa-solid fa-arrow-right"></i></button>
+      <div class="weatherforecast">
+        <nav>
+          <div class="logo">Weatherino</div>
+          <div class="search">
+            <div class="searchBtn">
+              <input
+                type="search"
+                name=""
+                id="search"
+                placeholder="Search for your city..."
+              />
+              <button><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+          </div>
+          <div class="themeToggle">
+            <button id="dayBtn" onclick="dayNight('day')" class="active">
+              Day
+            </button>
+            <button id="nightBtn" onclick="dayNight('night')">Night</button>
+          </div>
+          <div class="saved"><button>☆</button></div>
+        </nav>
+        <div class="weatherDisplay">
+          <div class="cityLine">
+            <div class="cityLabel">
+              <div class="city">Yangon</div>
+              <div class="country">Myanmar</div>
+              <div class="time">2026-3-22 2:00 AM - GMT + 6:30</div>
+            </div>
+            <div class="saveBtn"><button>☆</button></div>
+          </div>
+          <div class="weather">
+            <div class="estTemp">20° <i class="fa-solid fa-cloud-sun"></i></div>
+            <div class="estWeather">Estimated weather - Cloudy</div>
+          </div>
+          <div class="suggestionGroup">
+            <div class="suggestion">
+              Mellow day — perfect for a museum visit
+            </div>
+            <div class="suggestion">Light clothing, maybe sunglasses</div>
+          </div>
+          <hr />
+          <div class="stats">
+            <div class="stat">
+              <div class="statLabel">Humidity</div>
+              <div class="statEst"></div>
+            </div>
+            <div class="stat">
+              <div class="statLabel">Feels like</div>
+              <div class="statEst"></div>
+            </div>
+            <div class="stat">
+              <div class="statLabel">Wind</div>
+              <div class="statEst"></div>
+            </div>
+            <div class="stat">
+              <div class="statLabel">Direction</div>
+              <div class="statEst"></div>
+            </div>
           </div>
         </div>
-        <div class="themeToggle">
-          <button id="dayBtn" onclick="dayNight" class="active">Day</button>
-          <button id="dayBtn" onclick="dayNight">Night</button>
+        <div class="hourlyForecast">
+          <div class="hourlyforecast">
+            <div class="hfTitle">Hourly Forecast</div>
+            <div class="hForecastCards"></div>
+          </div>
         </div>
-        <div class="saved"><button>☆</button></div>
-      </nav>
-      <div class="weatherDisplay">
-        <div class="cityLine">
-          <div class="cityLabel">
-            <div class="city">Yangon</div>
-            <div class="country">Myanmar</div>
-            <div class="time">2026-3-22 2:00 AM - GMT + 6:30</div>
-          </div>
-          <div class="saveBtn"><button>☆</button></div>
+        <div class="placeSuggestionCard">
+          <div class="psTitle">Famous Place to visit</div>
+          <div class="psCards"></div>
         </div>
-        <div class="weather">
-          <div class="estTemp">20° <i class="fa-solid fa-cloud-sun"></i></div>
-          <div class="estWeather">Estimated weather - Cloudy</div>
-        </div>
-        <div class="suggestionGroup">
-          <div class="suggestion">Mellow day — perfect for a museum visit</div>
-          <div class="suggestion">Light clothing, maybe sunglasses</div>
-        </div>
-        <hr />
-        <div class="stats">
-          <div class="stat">
-            <div class="statLabel">Humidity</div>
-            <div class="statEst"></div>
+      </div>
+      <div class="calendar">
+        <div class="calendarCard">
+          <!-- Month Nav -->
+          <div class="monthHeader">
+            <button class="prevM" onclick="changeMonth(-1)">‹</button>
+            <div class="curM">
+              <div class="monthLabel" id="month-label">
+                June <span class="yearLabel">2026</span>
+              </div>
+            </div>
+            <button class="nextM" onclick="changeMonth(1)">›</button>
           </div>
-          <div class="stat">
-            <div class="statLabel">Feels like</div>
-            <div class="statEst"></div>
+
+          <!-- Day Headers -->
+          <div class="dayHeaders">
+            <div class="dayHeaderCell weekend">Sun</div>
+            <div class="dayHeaderCell">Mon</div>
+            <div class="dayHeaderCell">Tue</div>
+            <div class="dayHeaderCell">Wed</div>
+            <div class="dayHeaderCell">Thu</div>
+            <div class="dayHeaderCell">Fri</div>
+            <div class="dayHeaderCell weekend">Sat</div>
           </div>
-          <div class="stat">
-            <div class="statLabel">Wind</div>
-            <div class="statEst"></div>
-          </div>
-          <div class="stat">
-            <div class="statLabel">Direction</div>
-            <div class="statEst"></div>
-          </div>
+
+          <hr style="border: 1px solid rgba(255, 255, 255, 0.407);margin-top: 10px;" />
+          <!-- Grid -->
+          <div class="cal-grid" id="cal-grid"></div>
         </div>
       </div>
     </div>
