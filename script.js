@@ -40,7 +40,7 @@ window.onload = function () {
   }
 };
 
-//Star creation
+//Star creation (Ai generated)
 function buildStars() {
   const el = document.getElementById("stars-overlay");
   for (let i = 0; i < 120; i++) {
@@ -72,6 +72,22 @@ for (let i = 0; i < 24; i++) {
 
   hourlyF.append(hCard);
 }
+
+//Place suggestion
+const pSuggestion = document.querySelector(".psCards");
+for (let j = 0; j < 6; j++) {
+  const psCard = document.createElement("div");
+  psCard.className = "psCard";
+  psCard.innerHTML = `
+    <div class="psPlace">Shwe Dagon</div>
+    <button><i class="fa-solid fa-angle-down"></i></button>
+    <div class="psSuggestion">Golden mount of Myanmar</div>
+    `;
+
+  pSuggestion.append(psCard);
+}
+
+//Wind canvas
 
 //Calendar
 let currentDate = new Date();

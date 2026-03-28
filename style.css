@@ -130,7 +130,6 @@ nav {
   background: rgba(255, 255, 255, 0.22);
 }
 
-
 /* Star Creation */
 .stars-overlay {
   position: fixed;
@@ -144,7 +143,7 @@ nav {
   opacity: 1;
 }
 .star {
-  position: absolute;
+  position: fixed;
   background: #fff;
   border-radius: 50%;
   animation: twinkle var(--dur, 2s) ease-in-out infinite;
@@ -173,10 +172,6 @@ nav {
 .cityLine {
   display: flex;
   justify-content: space-between;
-  /* margin: 50px; */
-}
-
-.cityLabel {
 }
 
 .city {
@@ -258,7 +253,7 @@ nav {
 
 .stats {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 2fr;
 }
 
 .stat {
@@ -278,13 +273,20 @@ nav {
   color: white;
 }
 
+#wind-canvas {
+  width: 100%;
+  height: 160px;
+  border-radius: 12px;
+  display: block;
+}
+
 .hfTitle,
 .psTitle {
   font-family: Fira Sans;
   font-size: 20px;
   align-content: end;
-  margin-left: 10px;
   color: var(--text-dim);
+  margin-bottom: 10px;
 }
 
 .hForecastCards {
@@ -295,7 +297,6 @@ nav {
 }
 
 .hForecastCards::-webkit-scrollbar {
-  margin-top: 10px;
   background: var(--glass);
   height: 6px;
   border-radius: 3px;
@@ -323,6 +324,52 @@ nav {
 
 .hCard .time {
   grid-column: 1 / span 2;
+}
+
+.hCard .temp {
+  color: rgba(255, 255, 255, 0.766);
+  font-family: Lato;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.psCards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.psCard {
+  background: var(--glass);
+  border-radius: 15px;
+  padding: 10px 15px;
+  width: 500px;
+  display: grid;
+  grid-template-columns: 12fr 1fr;
+  grid-template-rows: auto auto;
+  color: white;
+}
+
+.psCard:hover {
+  background: var(--glass-hover);
+}
+
+.psCard .psPlace {
+  font-family: Public sans;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.psCard button {
+  background: rgba(255, 255, 255, 0.22);
+  border: var(--glass-border);
+  outline: none;
+  color: white;
+  border-radius: 10px;
+  height: 35px;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
 }
 
 .calendar {
