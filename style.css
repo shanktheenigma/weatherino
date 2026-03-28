@@ -130,6 +130,35 @@ nav {
   background: rgba(255, 255, 255, 0.22);
 }
 
+
+/* Star Creation */
+.stars-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1s;
+}
+.stars-overlay.visible {
+  opacity: 1;
+}
+.star {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle var(--dur, 2s) ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: var(--max-op, 0.8);
+  }
+  50% {
+    opacity: 0.1;
+  }
+}
+
 .weatherDisplay,
 .hourlyForecast,
 .placeSuggestionCard {

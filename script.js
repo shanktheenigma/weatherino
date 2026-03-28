@@ -3,6 +3,7 @@ function dayNight(mode) {
   const body = document.body;
   const dayBtn = document.getElementById("dayBtn");
   const nightBtn = document.getElementById("nightBtn");
+  const starsOverlay = document.getElementById("stars-overlay");
 
   if (mode === "day") {
     body.classList.remove("night");
@@ -10,14 +11,25 @@ function dayNight(mode) {
 
     dayBtn.classList.add("active");
     nightBtn.classList.remove("active");
+
     localStorage.setItem("theme", "day");
+
+    // REMOVE stars in day mode
+    if (starsOverlay) starsOverlay.innerHTML = "";
   } else {
     body.classList.remove("day");
     body.classList.add("night");
 
     nightBtn.classList.add("active");
     dayBtn.classList.remove("active");
+
     localStorage.setItem("theme", "night");
+
+    // ADD stars in night mode
+    if (starsOverlay) {
+      starsOverlay.innerHTML = ""; // clear old stars first
+      buildStars();
+    }
   }
 }
 
@@ -27,6 +39,25 @@ window.onload = function () {
     dayNight(savedTheme);
   }
 };
+
+//Star creation
+function buildStars() {
+  const el = document.getElementById("stars-overlay");
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement("div");
+    const size = Math.random() * 2.5 + 0.5;
+    s.className = "star";
+    s.style.cssText = `
+      left:${Math.random() * 100}%;
+      top:${Math.random() * 100}%;
+      width:${size}px; height:${size}px;
+      --max-op:${Math.random() * 0.7 + 0.3};
+      --dur:${Math.random() * 3 + 1.5}s;
+      animation-delay:${Math.random() * 3}s;
+    `;
+    el.appendChild(s);
+  }
+}
 
 //Hourly Forecast
 const hourlyF = document.querySelector(".hForecastCards");
