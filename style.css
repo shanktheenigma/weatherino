@@ -258,6 +258,44 @@ nav {
   color: var(--text-dim);
 }
 
+.hForecastCards {
+  display: flex;
+  justify-content: space-between;
+  overflow-x: auto;
+  gap: 10px;
+}
+
+.hForecastCards::-webkit-scrollbar {
+  margin-top: 10px;
+  background: var(--glass);
+  height: 6px;
+  border-radius: 3px;
+}
+
+.hForecastCards::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 3px;
+}
+
+.hForecastCards::-webkit-scrollbar-thumb:hover {
+  background: var(--glass-hover);
+}
+
+.hCard {
+  border: var(--glass-border);
+  background: var(--glass);
+  padding: 10px;
+  border-radius: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 columns */
+  grid-template-rows: auto auto;
+  margin: 10px 0px;
+}
+
+.hCard .time {
+  grid-column: 1 / span 2;
+}
+
 .calendar {
   background: var(--glass);
   border: 1px solid var(--glass-border);

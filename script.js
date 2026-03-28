@@ -28,7 +28,19 @@ window.onload = function () {
   }
 };
 
-//
+//Hourly Forecast
+const hourlyF = document.querySelector(".hForecastCards");
+for (let i = 0; i < 24; i++) {
+  const hCard = document.createElement("div");
+  hCard.className = "hCard";
+
+  hCard.innerHTML = `
+    <div class="time">${String(i).padStart(2, "0")}:00</div>
+    <div class="temp">${25 + Math.floor(Math.random() * 5)}°</div>
+    <div class="icon">☁️</div>`;
+
+  hourlyF.append(hCard);
+}
 
 //Calendar
 let currentDate = new Date();
