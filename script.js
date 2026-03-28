@@ -1,4 +1,4 @@
-//Day Night mode 
+//Day Night mode
 function dayNight(mode) {
   const body = document.body;
   const dayBtn = document.getElementById("dayBtn");
@@ -28,4 +28,21 @@ window.onload = function () {
   }
 };
 
+//
 
+//Calendar
+let currentDate = new Date();
+
+function renderCalendar() {
+  const calGrid = document.getElementById("calGrid");
+  const monthLabel = document.getElementById("month-label");
+
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+
+  // Set month label
+  const monthName = currentDate.toLocaleString("default", { month: "long" });
+  monthLabel.innerHTML = `${monthName} <span class="yearLabel">${year}</span>`;
+}
+
+renderCalendar();

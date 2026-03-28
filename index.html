@@ -45,15 +45,15 @@
         <div class="weatherDisplay">
           <div class="cityLine">
             <div class="cityLabel">
-              <div class="city">Yangon</div>
               <div class="country">Myanmar</div>
-              <div class="time">2026-3-22 2:00 AM - GMT + 6:30</div>
+              <div class="city">Yangon</div>
+              <!-- <div class="time">2026-3-22 2:00 AM - GMT + 6:30</div> -->
             </div>
             <div class="saveBtn"><button>☆</button></div>
           </div>
           <div class="weather">
-            <div class="estTemp">20° <i class="fa-solid fa-cloud-sun"></i></div>
             <div class="estWeather">Estimated weather - Cloudy</div>
+            <div class="estTemp">20° <i class="fa-solid fa-cloud-sun"></i></div>
           </div>
           <div class="suggestionGroup">
             <div class="suggestion">
@@ -99,7 +99,7 @@
             <button class="prevM" onclick="changeMonth(-1)">‹</button>
             <div class="curM">
               <div class="monthLabel" id="month-label">
-                June <span class="yearLabel">2026</span>
+                <span class="yearLabel"></span>
               </div>
             </div>
             <button class="nextM" onclick="changeMonth(1)">›</button>
@@ -116,7 +116,12 @@
             <div class="dayHeaderCell weekend">Sat</div>
           </div>
 
-          <hr style="border: 1px solid rgba(255, 255, 255, 0.407);margin-top: 10px;" />
+          <hr
+            style="
+              border: 1px solid rgba(255, 255, 255, 0.407);
+              margin-top: 10px;
+            "
+          />
           <!-- Grid -->
           <div class="calGrid" id="calGrid"></div>
         </div>
