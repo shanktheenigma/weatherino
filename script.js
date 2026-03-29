@@ -59,20 +59,6 @@ function buildStars() {
   }
 }
 
-//Hourly Forecast
-const hourlyF = document.querySelector(".hForecastCards");
-for (let i = 0; i < 24; i++) {
-  const hCard = document.createElement("div");
-  hCard.className = "hCard";
-
-  hCard.innerHTML = `
-    <div class="time">${String(i).padStart(2, "0")}:00</div>
-    <div class="temp">${25 + Math.floor(Math.random() * 5)}°</div>
-    <div class="icon">☁️</div>`;
-
-  hourlyF.append(hCard);
-}
-
 //Place suggestion
 const pSuggestion = document.querySelector(".psCards");
 for (let j = 0; j < 6; j++) {
@@ -105,3 +91,67 @@ function renderCalendar() {
 }
 
 renderCalendar();
+
+const url =
+  "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&daily=temperature_2m_max,temperature_2m_min,wind_speed_10m_max,temperature_2m_mean,relative_humidity_2m_mean&hourly=temperature_2m,relative_humidity_2m,precipitation,rain,snowfall,wind_speed_10m,wind_direction_10m,is_day&current=temperature_2m,relative_humidity_2m,is_day,wind_speed_10m,wind_direction_10m,snowfall,rain&minutely_15=temperature_2m,relative_humidity_2m,is_day,rain,precipitation,snowfall,wind_speed_10m,wind_direction_10m,sunshine_duration";
+
+async function fetchWeather() {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Failed to fetch weather data");
+
+    const data = await response.json();
+    console.log(data); // check the full API response
+    hourlyForecast(data);
+    weatherForecast(data); // pass data to your function to show it
+  } catch (err) {
+    console.error("Error fetching weather:", err);
+  }
+}
+
+// Call it on page load
+window.onload = function () {
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme) {
+    dayNight(savedTheme);
+  }
+
+  fetchWeather(); // fetch weather when page loads
+};
+
+//Hourly Forecast
+function hourlyForecast(data) {
+  const hourlyTemps = data.hourly.temperature_2m;
+  const hourlyF = document.querySelector(".hForecastCards");
+  if (!hourlyF) return;
+
+  hourlyF.innerHTML = "";
+
+  for (let i = 0; i < 24; i++) {
+    const hCard = document.createElement("div");
+    hCard.className = "hCard";
+
+    hCard.innerHTML = `
+      <div class="time">${String(i).padStart(2, "0")}:00</div>
+      <div class="temp">${hourlyTemps[i]}°C</div>
+      <div class="icon">☁️</div>
+    `;
+
+    hourlyF.append(hCard);
+  }
+
+  const currentTemp = data.current.temperature_2m;
+  const currentEl = document.getElementById("currentTemp");
+  if (currentEl) currentEl.innerText = `${currentTemp}°C`;
+}
+
+function weatherForecast(data) {
+  const APITemp = data.current.temperature_2m;
+  const weather = document.querySelector(".weather");
+  if (!weather) return;
+
+  weather.innerHTML = `
+    <div class="estWeather">Estimated weather - Cloudy</div>
+    <div class="estTemp">${APITemp}°C <i class="fa-solid fa-cloud-sun"></i></div>
+  `;
+}
