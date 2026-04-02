@@ -15,14 +15,43 @@
   --shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
   --radius: 24px;
   --radius-sm: 16px;
+
+  --bg-sunny: linear-gradient(135deg, #f7971e 0%, #e85d04 30%, #9c2900 100%);
+  --bg-cloudy: linear-gradient(135deg, #89a4c7 0%, #6b7f9e 40%, #3d4f6e 100%);
+  --bg-rain: linear-gradient(135deg, #2c3e6b 0%, #1a2a4a 40%, #0d1b33 100%);
+  --bg-night: linear-gradient(135deg, #0f0c29 0%, #1a1a3e 40%, #24243e 100%);
+  --bg-snow: linear-gradient(135deg, #b8d4ea 0%, #8fb3d3 40%, #5a8aaf 100%);
+  --bg-thunder: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+  --bg-clear-night: linear-gradient(
+    135deg,
+    #0f0c29 0%,
+    #302b63 40%,
+    #24243e 100%
+  );
+
+  --current-bg: var(--bg-sunny);
 }
 
 body.day {
-  background: linear-gradient(135deg, #89a4c7 0%, #6b7f9e 40%, #3d4f6e 100%);
+  background: var(--current-bg);
+  background-size: 400% 400%;
+  animation: bg-move 10s ease infinite;
+}
+
+@keyframes bg-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 body.night {
-  background: linear-gradient(135deg, #0f0c29 0%, #302b63 40%, #24243e 100%);
+  background: var(--bg-night);
 }
 
 .container {

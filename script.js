@@ -1,46 +1,122 @@
-//Day Night mode
+const weatherAPI =
+  "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,is_day,weather_code";
+
+const isNightMode = false;
+
+// Remdering Weather
+function renderWeather(data) {
+  //Weather code
+  // function weatherInfo(code, isDay) {
+  //   if (code === 0) {
+  //     return isDay
+  //       ? { label: "Clear Sky", icon: "", background: "sunny" }
+  //       : { label: "Clear Night", icon: "", background: "clear-night" };
+  //   }
+  //   if (code <= 2)
+  //     return isDay
+  //       ? { label: "Partly Cloudy", icon: "", mood: "cloudy" }
+  //       : { label: "Partly Cloudy", icon: "", mood: "clear-night" };
+  //   if (code === 3) return { label: "Overcast", icon: "", mood: "cloudy" };
+  //   if (code <= 49) return { label: "Foggy", icon: "", mood: "cloudy" };
+  //   if (code <= 59) return { label: "Drizzle", icon: "", mood: "rain" };
+  //   if (code <= 69) return { label: "Rain", icon: "", mood: "rain" };
+  //   if (code <= 79) return { label: "Snow", icon: "", mood: "snow" };
+  //   if (code <= 84) return { label: "Rain Showers", icon: "", mood: "rain" };
+  //   if (code <= 94) return { label: "Snow Showers", icon: "", mood: "snow" };
+  //   return { label: "Thunderstorm", icon: "", mood: "thunder" };
+  // }
+
+  // function background(mood, forceNight) {
+  //   if (forceNight) return "var(--night)";
+  //   const map = {
+  //     sunny: "var(--sunny)",
+  //     cloudy: "var(--cloudy)",
+  //     rain: "var(--rain)",
+  //     snow: "var(--snow)",
+  //     thunder: "var(--thunder)",
+  //     "clear-night": "var(--clear-night)",
+  //   };
+  //   return map[mood] || "var(--cloudy)";
+  // }
+
+  // Current Weather
+  const currentTemp = data.current.temperature_2m;
+  const currentEl = document.getElementById("currentTemp");
+  if (currentEl) currentEl.innerText = `${currentTemp}°C`;
+
+  // Estimated weather
+  const weather = document.querySelector(".weather");
+  if (weather) {
+    weather.innerHTML = `
+      <div class="estWeather">Estimated weather</div>
+      <div class="estTemp">${currentTemp}°C <i class="fa-solid fa-cloud-sun"></i></div>
+    `;
+  }
+
+  // Hourly forecast
+  const hourlyTemps = data.hourly.temperature_2m;
+  const hourlyF = document.querySelector(".hForecastCards");
+  if (!hourlyF) return;
+
+  hourlyF.innerHTML = "";
+
+  for (let i = 0; i < 24; i++) {
+    const hCard = document.createElement("div");
+    hCard.className = "hCard";
+
+    hCard.innerHTML = `
+      <div class="time">${String(i).padStart(2, "0")}:00</div>
+      <div class="temp">${hourlyTemps[i]}°C</div>
+    `;
+
+    hourlyF.append(hCard);
+  }
+}
+
+// Weather API fetching
+async function fetchWeather() {
+  try {
+    const response = await fetch(weatherAPI);
+    if (!response.ok) throw new Error("Failed to fetch weather data");
+
+    const data = await response.json();
+    console.log(data);
+
+    renderWeather(data);
+  } catch (err) {
+    console.error("Error fetching weather:", err);
+  }
+}
+
+// Day Night Mode Changer
 function dayNight(mode) {
   const body = document.body;
   const dayBtn = document.getElementById("dayBtn");
   const nightBtn = document.getElementById("nightBtn");
   const starsOverlay = document.getElementById("stars-overlay");
-
   if (mode === "day") {
     body.classList.remove("night");
     body.classList.add("day");
-
     dayBtn.classList.add("active");
     nightBtn.classList.remove("active");
-
     localStorage.setItem("theme", "day");
-
     // REMOVE stars in day mode
     if (starsOverlay) starsOverlay.innerHTML = "";
   } else {
     body.classList.remove("day");
     body.classList.add("night");
-
     nightBtn.classList.add("active");
     dayBtn.classList.remove("active");
-
     localStorage.setItem("theme", "night");
-
     // ADD stars in night mode
     if (starsOverlay) {
-      starsOverlay.innerHTML = ""; // clear old stars first
+      starsOverlay.innerHTML = "";
       buildStars();
     }
   }
 }
 
-window.onload = function () {
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme) {
-    dayNight(savedTheme);
-  }
-};
-
-//Star creation (Ai generated)
+// Stars creation
 function buildStars() {
   const el = document.getElementById("stars-overlay");
   for (let i = 0; i < 120; i++) {
@@ -58,100 +134,28 @@ function buildStars() {
     el.appendChild(s);
   }
 }
+// Loading stored data from Local Storage
+window.onload = function () {
+  const savedTheme = localStorage.getItem("theme") || "day";
+  dayNight(savedTheme);
 
-//Place suggestion
-const pSuggestion = document.querySelector(".psCards");
-for (let j = 0; j < 6; j++) {
-  const psCard = document.createElement("div");
-  psCard.className = "psCard";
-  psCard.innerHTML = `
-    <div class="psPlace">Shwe Dagon</div>
-    <button><i class="fa-solid fa-angle-down"></i></button>
-    <div class="psSuggestion">Golden mount of Myanmar</div>
-    `;
+  fetchWeather();
+};
 
-  pSuggestion.append(psCard);
-}
-
-//Wind canvas
-
-//Calendar
+// Calendar
 let currentDate = new Date();
 
 function renderCalendar() {
-  const calGrid = document.getElementById("calGrid");
   const monthLabel = document.getElementById("month-label");
 
   const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
+  const monthName = currentDate.toLocaleString("default", {
+    month: "long",
+  });
 
-  // Set month label
-  const monthName = currentDate.toLocaleString("default", { month: "long" });
-  monthLabel.innerHTML = `${monthName} <span class="yearLabel">${year}</span>`;
+  if (monthLabel) {
+    monthLabel.innerHTML = `${monthName} <span class="yearLabel">${year}</span>`;
+  }
 }
 
 renderCalendar();
-
-const url =
-  "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&daily=temperature_2m_max,temperature_2m_min,wind_speed_10m_max,temperature_2m_mean,relative_humidity_2m_mean&hourly=temperature_2m,relative_humidity_2m,precipitation,rain,snowfall,wind_speed_10m,wind_direction_10m,is_day&current=temperature_2m,relative_humidity_2m,is_day,wind_speed_10m,wind_direction_10m,snowfall,rain&minutely_15=temperature_2m,relative_humidity_2m,is_day,rain,precipitation,snowfall,wind_speed_10m,wind_direction_10m,sunshine_duration";
-
-async function fetchWeather() {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Failed to fetch weather data");
-
-    const data = await response.json();
-    console.log(data); // check the full API response
-    hourlyForecast(data);
-    weatherForecast(data); // pass data to your function to show it
-  } catch (err) {
-    console.error("Error fetching weather:", err);
-  }
-}
-
-// Call it on page load
-window.onload = function () {
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme) {
-    dayNight(savedTheme);
-  }
-
-  fetchWeather(); // fetch weather when page loads
-};
-
-//Hourly Forecast
-function hourlyForecast(data) {
-  const hourlyTemps = data.hourly.temperature_2m;
-  const hourlyF = document.querySelector(".hForecastCards");
-  if (!hourlyF) return;
-
-  hourlyF.innerHTML = "";
-
-  for (let i = 0; i < 24; i++) {
-    const hCard = document.createElement("div");
-    hCard.className = "hCard";
-
-    hCard.innerHTML = `
-      <div class="time">${String(i).padStart(2, "0")}:00</div>
-      <div class="temp">${hourlyTemps[i]}°C</div>
-      <div class="icon">☁️</div>
-    `;
-
-    hourlyF.append(hCard);
-  }
-
-  const currentTemp = data.current.temperature_2m;
-  const currentEl = document.getElementById("currentTemp");
-  if (currentEl) currentEl.innerText = `${currentTemp}°C`;
-}
-
-function weatherForecast(data) {
-  const APITemp = data.current.temperature_2m;
-  const weather = document.querySelector(".weather");
-  if (!weather) return;
-
-  weather.innerHTML = `
-    <div class="estWeather">Estimated weather - Cloudy</div>
-    <div class="estTemp">${APITemp}°C <i class="fa-solid fa-cloud-sun"></i></div>
-  `;
-}
