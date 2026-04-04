@@ -224,7 +224,6 @@ nav {
   }
 }
 
-
 .weatherDisplay,
 .hourlyForecast,
 .placeSuggestionCard {
@@ -335,31 +334,92 @@ nav {
 
 .stats {
   display: grid;
-  grid-template-columns: 1fr 1fr 2fr;
+  grid-template-columns: 20% 30% 50%;
 }
 
 .stat {
-  background: var(--glass);
   margin: 10px;
   margin-top: 30px;
-  height: 100px;
-  border: var(--glass-border);
-  border-radius: 20px;
-  padding: 10px 20px;
 }
 
 .statLabel {
   font-family: Fira Sans;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 400;
   color: white;
+}
+
+.estHumidity,
+.avgTemp,
+#wind-card {
+  font-size: 20px;
+  font-family: Public Sans;
+  font-weight: 700;
+  color: white;
+  background: var(--glass);
+  border: var(--glass-border);
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.humidity-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.humidity-fill {
+  height: 100%;
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+  width: 0%;
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+
+#wind-card {
+  display: flex;
+  justify-content: space-between;
+  height: 180px;
 }
 
 #wind-canvas {
   width: 100%;
-  height: 160px;
-  border-radius: 12px;
+  height: 100%;
   display: block;
+}
+
+.windSpeed {
+  margin-top: 20px;
+}
+
+.windSpeed .kmp {
+  font-size: 1rem;
+  opacity: 0.6;
+  font-weight: 300;
+  margin-left: 5px;
+}
+
+.windInfo span {
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.avgTDescription,
+.desc {
+  font-size: 15px;
+  color: var(--text-dim);
+  font-weight: 300;
+  margin-top: 5px;
+}
+
+.avgTDescription span {
+  font-weight: 800;
+  margin-right: 5px;
 }
 
 .hfTitle,

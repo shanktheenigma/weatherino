@@ -1,7 +1,10 @@
 const weatherAPI =
-  "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,is_day,weather_code";
+  "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&daily=weather_code,temperature_2m_max,temperature_2m_min,wind_speed_10m_max,wind_direction_10m_dominant&hourly=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m,wind_direction_10m&current=temperature_2m,is_day,relative_humidity_2m,rain,snowfall,weather_code,wind_speed_10m,wind_direction_10m&minutely_15=temperature_2m,relative_humidity_2m,rain,weather_code,wind_speed_10m,wind_direction_10m,is_day";
 
 let isNightMode = false;
+let windParticles = [];
+let windCanvas, windCtx;
+let animFrame;
 
 // Setting up weather info with code from API
 function weatherInfo(code, isDay) {
@@ -50,17 +53,36 @@ function updateEffects(mood) {
   const starsOverlay = document.getElementById("stars-overlay");
   const rainOverlay = document.getElementById("rain-overlay");
 
-  starsOverlay.classList.toggle("vissible", mood === "clear-night");
-  rainOverlay.classList.toggle("vissible", mood === "rain");
+  starsOverlay.classList.toggle("visible", mood === "clear-night");
+  rainOverlay.classList.toggle(
+    "visible",
+    mood === "rain" || mood === "thunder",
+  );
 
   if (mood === "clear-night" && !starsOverlay.children.length) buildStars();
   if ((mood === "rain" || mood === "thunder") && !rainOverlay.children.length)
     buildRain();
 }
 
+function getWindDir(deg) {
+  const dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+  return dirs[Math.round(deg / 45) % 8];
+}
+
+function getHumidityDesc(h) {
+  if (h < 40) return "Dry air — comfortable";
+  if (h < 70) return "Moderate humidity";
+  return "High humidity — feels sticky";
+}
+
 // Renderng weather
 function renderWeather(data) {
   const c = data.current;
+  const humidity = c.relative_humidity_2m;
+  const currentTemp = c.temperature_2m;
+  const hourlyTemps = data.hourly.temperature_2m;
+  const windSpeed = Math.round(c.wind_speed_10m);
+  const windDir = c.wind_direction_10m;
 
   const isDay = c.is_day === 1;
   const wInfo = weatherInfo(c.weather_code, isDay);
@@ -71,7 +93,6 @@ function renderWeather(data) {
   updateEffects(mood);
 
   // Current Temp
-  const currentTemp = c.temperature_2m;
   const currentEl = document.getElementById("currentTemp");
   if (currentEl) currentEl.innerText = `${currentTemp}°C`;
 
@@ -86,11 +107,47 @@ function renderWeather(data) {
     `;
   }
 
+  // Humidity
+  const estHumidity = document.querySelector(".estHumidity");
+  estHumidity.innerHTML = `<div class="value">${humidity}% </div>
+  <div class="humidity-bar">
+    <div class="humidity-fill"></div>
+  </div>
+
+  <div class="desc">Dry air — comfortable</div>`;
+  const humidityFill = document.querySelector(".humidity-fill");
+  if (humidityFill) {
+    humidityFill.style.width = `${humidity}%`;
+  }
+
+  // Average Temperature
+  const sum = hourlyTemps.reduce((total, temp) => total + temp, 0);
+  const avgTemp = sum / hourlyTemps.length;
+  const atd = currentTemp - avgTemp;
+  const averageTemp = document.querySelector(".avgTemp");
+  averageTemp.innerHTML = `${avgTemp.toFixed(1)}°C
+  <div class="avgTDescription"><span>${atd.toFixed(1)}°C</span> higher than Average Temperature </div>`;
+
+  //Wind Canvas
+  const windCard = document.getElementById("wind-card");
+  windCard.innerHTML = `
+  <div class="windInfo">
+    <div class="statLabel">Wind</div>
+    
+    <div class="windSpeed">${windSpeed}<span class="kmp">km/h</span></div>
+    
+    <span>Direction: ${getWindDir(windDir)}</span>
+    <span>${windDir}°</span>
+  </div>
+
+  <div class="wind-animation">
+    <canvas id="wind-canvas"></canvas>
+  </div>
+    `;
+
   // Hourly forecast
-  const hourlyTemps = data.hourly.temperature_2m;
   const hourlyF = document.querySelector(".hForecastCards");
   if (!hourlyF) return;
-
   hourlyF.innerHTML = "";
 
   for (let i = 0; i < 24; i++) {
@@ -104,6 +161,8 @@ function renderWeather(data) {
 
     hourlyF.append(hCard);
   }
+
+  setTimeout(() => initWindCanvas(windSpeed, windDir), 50);
 }
 
 // Fetching API
@@ -205,6 +264,75 @@ function buildRain() {
   }
 }
 
+// Wind canvas (AI generated)
+function initWindCanvas(speed, direction) {
+  const windCanvas = document.getElementById("wind-canvas");
+  if (!windCanvas) return;
+  windCtx = windCanvas.getContext("2d");
+
+  const dpr = window.devicePixelRatio || 1;
+  const rect = windCanvas.getBoundingClientRect();
+
+  windCanvas.width = rect.width * dpr;
+  windCanvas.height = rect.height * dpr;
+
+  windCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const W = rect.width;
+  const H = 160;
+  windParticles = [];
+
+  const count = Math.max(20, Math.min(60, speed * 2));
+  const radians = ((direction - 90) * Math.PI) / 180;
+  const vx = Math.cos(radians) * (0.5 + speed / 60);
+  const vy = Math.sin(radians) * (0.5 + speed / 60);
+
+  for (let i = 0; i < count; i++) {
+    windParticles.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      len: Math.random() * 30 + 10,
+      speed: Math.random() * 1.5 + 0.5,
+      opacity: Math.random() * 0.5 + 0.1,
+      vx,
+      vy,
+    });
+  }
+
+  cancelAnimationFrame(animFrame);
+  animateWind(W, H, vx, vy);
+}
+
+// Wind animation (AI generated)
+function animateWind(W, H, vx, vy) {
+  windCtx.clearRect(0, 0, W, H);
+  windCtx.fillStyle = "rgba(0,0,0,0.03)";
+  windCtx.fillRect(0, 0, W, H);
+
+  windParticles.forEach((p) => {
+    const tail = { x: p.x - vx * p.len, y: p.y - vy * p.len };
+    const grad = windCtx.createLinearGradient(tail.x, tail.y, p.x, p.y);
+    grad.addColorStop(0, `rgba(255,255,255,0)`);
+    grad.addColorStop(1, `rgba(255,255,255,${p.opacity})`);
+
+    windCtx.beginPath();
+    windCtx.moveTo(tail.x, tail.y);
+    windCtx.lineTo(p.x, p.y);
+    windCtx.strokeStyle = grad;
+    windCtx.lineWidth = 1.5;
+    windCtx.stroke();
+
+    p.x += vx * p.speed;
+    p.y += vy * p.speed;
+    if (p.x > W + 20) p.x = -20;
+    if (p.x < -20) p.x = W + 20;
+    if (p.y > H + 20) p.y = -20;
+    if (p.y < -20) p.y = H + 20;
+  });
+
+  animFrame = requestAnimationFrame(() => animateWind(W, H, vx, vy));
+}
+
 // Saved Theme loading
 window.onload = function () {
   const savedTheme = localStorage.getItem("theme") || "day";
@@ -212,21 +340,3 @@ window.onload = function () {
 
   fetchWeather();
 };
-
-// Calendar
-// let currentDate = new Date();
-
-// function renderCalendar() {
-//   const monthLabel = document.getElementById("month-label");
-
-//   const year = currentDate.getFullYear();
-//   const monthName = currentDate.toLocaleString("default", {
-//     month: "long",
-//   });
-
-//   if (monthLabel) {
-//     monthLabel.innerHTML = `${monthName} <span class="yearLabel">${year}</span>`;
-//   }
-// }
-
-// renderCalendar();
