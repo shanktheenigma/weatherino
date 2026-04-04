@@ -50,6 +50,7 @@ function renderWeather(data) {
     weather.innerHTML = `
       <div class="estWeather">Estimated weather</div>
       <div class="estTemp">${currentTemp}°C <i class="fa-solid fa-cloud-sun"></i></div>
+      <div class="avgTemp"> °C higher than the Avrage Tempreture</div>
     `;
   }
 
