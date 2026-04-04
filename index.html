@@ -15,11 +15,13 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <link rel="shortcut icon" href="IMG/Favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="IMG/Favicon.png" type="image/x-icon" />
     <link rel="stylesheet" href="style.css" />
     <title>McWeather</title>
   </head>
   <body class="day">
+    <div id="stars-overlay"></div>
+    <div id="rain-overlay"></div>
     <div class="container">
       <div class="weatherforecast">
         <nav>
@@ -43,12 +45,13 @@
           </div>
           <div class="saved"><button>☆</button></div>
         </nav>
-        <div id="stars-overlay"></div>
         <div class="weatherDisplay">
           <div class="cityLine">
             <div class="cityLabel">
-              <div class="country">Myanmar</div>
-              <div class="city">Yangon</div>
+              <div class="country">
+                <i class="fa-solid fa-location-dot"></i
+                ><span class="city">Yangon</span>
+              </div>
               <!-- <div class="time">2026-3-22 2:00 AM - GMT + 6:30</div> -->
             </div>
             <div class="saveBtn"><button>☆</button></div>

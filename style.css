@@ -57,6 +57,7 @@ body.night {
 .container {
   margin: 0 auto;
   width: 70%;
+  z-index: 2;
 }
 
 nav {
@@ -99,6 +100,11 @@ nav {
 
 .search input::placeholder {
   color: var(--text-muted);
+}
+
+.search-input:focus {
+  background: var(--glass-hover);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .search input[type="search"]::-webkit-search-cancel-button {
@@ -163,15 +169,15 @@ nav {
 }
 
 /* Star Creation */
-.stars-overlay {
+#stars-overlay {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
   opacity: 0;
   transition: opacity 1s;
 }
-.stars-overlay.visible {
+#stars-overlay.visible {
   opacity: 1;
 }
 .star {
@@ -190,6 +196,35 @@ nav {
   }
 }
 
+#rain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1s;
+  overflow: hidden;
+}
+#rain-overlay.visible {
+  opacity: 1;
+}
+.raindrop {
+  position: absolute;
+  width: 1.5px;
+  background: linear-gradient(to bottom, transparent, rgba(180, 210, 255, 0.6));
+  animation: fall linear infinite;
+  border-radius: 1px;
+}
+@keyframes fall {
+  from {
+    transform: translateY(-100px);
+  }
+  to {
+    transform: translateY(110vh);
+  }
+}
+
+
 .weatherDisplay,
 .hourlyForecast,
 .placeSuggestionCard {
@@ -197,8 +232,8 @@ nav {
   background: var(--glass);
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow);
-  border-radius: 40px;
-  padding: 30px 50px;
+  border-radius: 28px;
+  padding: 24px 32px;
 }
 
 .cityLine {
@@ -209,8 +244,9 @@ nav {
 .city {
   color: white;
   font-family: Merriweather;
-  font-size: 50px;
+  font-size: 20px;
   font-weight: 500;
+  margin-right: 5px;
 }
 
 .country {
@@ -218,6 +254,14 @@ nav {
   font-size: 20px;
   align-content: end;
   color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.country i {
+  font-size: 20px;
+  margin-right: 10px;
 }
 
 .time {
@@ -228,7 +272,6 @@ nav {
 }
 
 .estTemp {
-  margin-top: 30px;
   font-size: 100px;
   color: white;
   font-family: Merriweather;
@@ -265,6 +308,13 @@ nav {
   font-family: Public Sans;
   margin-top: 10px;
   font-size: 18px;
+}
+
+.avgTemp {
+  color: var(--text-dim);
+  font-family: Public Sans;
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 
 .suggestionGroup {
