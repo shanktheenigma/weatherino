@@ -80,19 +80,19 @@ function getHumidityDesc(h) {
 
 function hourlyInfo(code) {
   if (code === 0) {
-    return { icon: "sun" };
+    return { icon: "sun" ,label: "Sunny"};
   }
 
   if (code <= 2) {
-    return { icon: "partly-cloudy-night" };
+    return { icon: "partly-cloudy-night",label: "Clear Night" };
   }
 
-  if (code === 3) return { icon: "overcast-day" };
-  if (code <= 49) return { icon: "fog" };
-  if (code <= 59) return { icon: "drizzle" };
-  if (code <= 69) return { icon: "rain" };
-  if (code <= 79) return { icon: "snow" };
-  if (code <= 94) return { icon: "thunderstorms" };
+  if (code === 3) return { icon: "overcast-day",label: "Cloudy"  };
+  if (code <= 49) return { icon: "fog",label: "Foggy"  };
+  if (code <= 59) return { icon: "drizzle",label: "Dizzle"  };
+  if (code <= 69) return { icon: "rain",label: "Heavy rain"  };
+  if (code <= 79) return { icon: "snow",label: "Snowy"  };
+  if (code <= 94) return { icon: "thunderstorms",label: "Thunder Storms"  };
 
   return { icon: "cloudy" };
 }
@@ -182,6 +182,7 @@ function renderWeather(data) {
 
     hCard.innerHTML = `
     <div class="time">${String(i).padStart(2, "0")}:00</div>
+    <div class="label">${hInfo.label}</div>
     <img src="https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/${hInfo.icon}.svg" width="40">
     <div class="temp">${hourlyTemps[i]}°C</div>
   `;
