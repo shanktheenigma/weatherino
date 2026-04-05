@@ -10,27 +10,30 @@ let animFrame;
 function weatherInfo(code, isDay) {
   if (code === 0) {
     return isDay
-      ? { label: "Clear Sky", icon: "fa-sun", mood: "sunny" }
-      : { label: "Clear Night", icon: "fa-moon", mood: "clear-night" };
+      ? { label: "Clear Sky", icon: "sun", mood: "sunny" }
+      : { label: "Clear Night", icon: "moon", mood: "clear-night" };
   }
 
   if (code <= 2) {
     return isDay
-      ? { label: "Partly Cloudy", icon: "fa-cloud-sun", mood: "cloudy" }
-      : { label: "Partly Cloudy", icon: "fa-cloud-moon", mood: "clear-night" };
+      ? { label: "Partly Cloudy", icon: "overcast-day", mood: "cloudy" }
+      : {
+          label: "Partly Cloudy",
+          icon: "partly-cloudy-night",
+          mood: "clear-night",
+        };
   }
 
   if (code === 3)
-    return { label: "Overcast", icon: "fa-cloud", mood: "cloudy" };
-  if (code <= 49) return { label: "Foggy", icon: "fa-smog", mood: "cloudy" };
-  if (code <= 59)
-    return { label: "Drizzle", icon: "fa-cloud-rain", mood: "rain" };
-  if (code <= 69)
-    return { label: "Rain", icon: "fa-cloud-showers-heavy", mood: "rain" };
-  if (code <= 79) return { label: "Snow", icon: "fa-snowflake", mood: "snow" };
-  if (code <= 94) return { label: "Storm", icon: "fa-bolt", mood: "thunder" };
+    return { label: "Overcast", icon: "overcast-day", mood: "cloudy" };
+  if (code <= 49) return { label: "Foggy", icon: "fog", mood: "cloudy" };
+  if (code <= 59) return { label: "Drizzle", icon: "drizzle", mood: "rain" };
+  if (code <= 69) return { label: "Rain", icon: "rain", mood: "rain" };
+  if (code <= 79) return { label: "Snow", icon: "snow", mood: "snow" };
+  if (code <= 94)
+    return { label: "Storm", icon: "thunderstorms", mood: "thunder" };
 
-  return { label: "Unknown", icon: "fa-cloud", mood: "cloudy" };
+  return { label: "Unknown", icon: "cloudy", mood: "cloudy" };
 }
 
 function getMoodBg(mood, forceNight) {
@@ -75,6 +78,25 @@ function getHumidityDesc(h) {
   return "High humidity — feels sticky";
 }
 
+function hourlyInfo(code) {
+  if (code === 0) {
+    return { icon: "sun" };
+  }
+
+  if (code <= 2) {
+    return { icon: "partly-cloudy-night" };
+  }
+
+  if (code === 3) return { icon: "overcast-day" };
+  if (code <= 49) return { icon: "fog" };
+  if (code <= 59) return { icon: "drizzle" };
+  if (code <= 69) return { icon: "rain" };
+  if (code <= 79) return { icon: "snow" };
+  if (code <= 94) return { icon: "thunderstorms" };
+
+  return { icon: "cloudy" };
+}
+
 // Renderng weather
 function renderWeather(data) {
   const c = data.current;
@@ -102,7 +124,8 @@ function renderWeather(data) {
       <div class="estWeather">${wInfo.label}</div>
       <div class="estTemp">
         ${currentTemp}°C 
-        <i class="fa-solid ${wInfo.icon}"></i>
+        <img class="weatherIcon" 
+       src="https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/${wInfo.icon}.svg">
       </div>
     `;
   }
@@ -114,7 +137,7 @@ function renderWeather(data) {
     <div class="humidity-fill"></div>
   </div>
 
-  <div class="desc">Dry air — comfortable</div>`;
+  <div class="desc">${getHumidityDesc(humidity)}</div>`;
   const humidityFill = document.querySelector(".humidity-fill");
   if (humidityFill) {
     humidityFill.style.width = `${humidity}%`;
@@ -151,13 +174,17 @@ function renderWeather(data) {
   hourlyF.innerHTML = "";
 
   for (let i = 0; i < 24; i++) {
+    const code = data.hourly.weather_code[i];
+    const hInfo = hourlyInfo(code);
+
     const hCard = document.createElement("div");
     hCard.className = "hCard";
 
     hCard.innerHTML = `
-      <div class="time">${String(i).padStart(2, "0")}:00</div>
-      <div class="temp">${hourlyTemps[i]}°C</div>
-    `;
+    <div class="time">${String(i).padStart(2, "0")}:00</div>
+    <img src="https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/${hInfo.icon}.svg" width="40">
+    <div class="temp">${hourlyTemps[i]}°C</div>
+  `;
 
     hourlyF.append(hCard);
   }

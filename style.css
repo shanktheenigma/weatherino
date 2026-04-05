@@ -275,31 +275,12 @@ nav {
   color: white;
   font-family: Merriweather;
   font-weight: 900;
+  display: flex;
+  align-items: center;
 }
 
-.estTemp i {
-  font-weight: 900;
-  font-size: 80px;
-  background: linear-gradient(-45deg, #738fb4 0%, #566b8b 40%, #2c3c57);
-  background-size: 400% 400%;
-  animation: gradient-move 10s ease infinite;
-
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-}
-
-@keyframes gradient-move {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+.estTemp img {
+  width: 180px;
 }
 
 .estWeather {
@@ -382,9 +363,10 @@ nav {
 }
 
 #wind-card {
+  margin-top: 0px;
   display: flex;
   justify-content: space-between;
-  height: 180px;
+  height: 150px;
 }
 
 #wind-canvas {
@@ -394,7 +376,7 @@ nav {
 }
 
 .windSpeed {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .windSpeed .kmp {
